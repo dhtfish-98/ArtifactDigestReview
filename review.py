@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import hashlib
-import json
+from local_input import read_local_file
+from strict_json import loads
 from pathlib import Path, PurePosixPath
 
 MAX_FILE = 128 * 1024 * 1024
@@ -11,11 +12,13 @@ MAX_FILE = 128 * 1024 * 1024
 
 def review_manifest(text: str, root: Path) -> list[dict[str, str]]:
     try:
-        document = json.loads(text)
-    except json.JSONDecodeError as exc:
+        document = loads(text)
+    except ValueError as exc:
         raise ValueError("invalid manifest JSON") from exc
     if not isinstance(document, dict) or not isinstance(document.get("files"), list):
         raise ValueError("expected files array")
+    if root.is_symlink():
+        raise ValueError("root must not be a symlink")
     root = root.resolve(strict=True)
     if not root.is_dir():
         raise ValueError("root must be a directory")
@@ -38,7 +41,7 @@ def review_manifest(text: str, root: Path) -> list[dict[str, str]]:
         if candidate.stat().st_size > MAX_FILE:
             findings.append({"rule": "size-limit", "location": name, "note": "File exceeds the review limit"})
             continue
-        digest = hashlib.sha256(candidate.read_bytes()).hexdigest()
+        digest = hashlib.sha256(read_local_file(candidate, MAX_FILE)).hexdigest()
         if digest != expected.lower():
             findings.append({"rule": "digest-mismatch", "location": name, "note": "Observed SHA-256 differs from the manifest"})
     return findings

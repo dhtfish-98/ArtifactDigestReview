@@ -16,7 +16,7 @@ python cli.py manifest.json ./owned-artifacts --json
 python -m unittest discover -s tests -v
 ```
 
-Exit code 0 means no findings, 1 means review findings, 2 means invalid input or read failure. A clean result is not a security guarantee. The file input limit is 4 MiB; ArtifactDigestReview also limits each artifact to 128 MiB.
+Exit code 0 means no findings, 1 means review findings, 2 means invalid input or read failure. A clean result is not a security guarantee. The input file is read through a bounded regular-file descriptor with a 4 MiB limit. Each artifact has a separate 128 MiB limit.
 
 ## Boundaries
 
@@ -27,3 +27,9 @@ A matching digest checks bytes against the supplied manifest; it does not authen
 - Technical reference: https://docs.python.org/3/library/hashlib.html
 - See [ORIGIN.md](ORIGIN.md) for implementation provenance and [VALIDATION.md](VALIDATION.md) for checks performed.
 - CVP eligibility depends on a real, legitimate defensive task affected by Claude's cyber safeguards and the applicant's organization/identity review; this repository alone does not establish eligibility or approval. [Anthropic CVP guidance](https://support.claude.com/en/articles/14604842-real-time-cyber-safeguards-on-claude-opus-and-sonnet).
+
+## Reviewed input behavior
+
+Manifest JSON rejects duplicate keys and nonstandard numbers. Artifact reads use a bounded regular-file descriptor; parent symlinks are checked and direct root symlinks are rejected. Concurrent path changes and manifest authenticity remain outside the guarantee.
+
+JSON input rejects duplicate object keys and nonstandard numbers; container nesting is limited to 128 levels.
