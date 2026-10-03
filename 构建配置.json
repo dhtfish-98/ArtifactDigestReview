@@ -1,0 +1,30 @@
+{
+  "schema": "project-build-layout.v1",
+  "project": "ArtifactDigestReview",
+  "author": "dhtfish98",
+  "kind": "manual",
+  "base_public_commit": "df755ffe1caf9727d7058bf8e9c2c58933aee932",
+  "restored_inputs": [
+    {
+      "original": "LICENSE",
+      "stored": "项目文档/LICENSE",
+      "sha256": "61cc81f0067016c9425160ac683a0791c1f9332a48ffe655d21b2602286e21be"
+    },
+    {
+      "original": "ORIGIN.md",
+      "stored": "项目文档/ORIGIN.md",
+      "sha256": "ea196b82d9703c40af60b28a9be24638846f39b5ade6c5a95827e44aea0046fc"
+    },
+    {
+      "original": "README.md",
+      "stored": "项目文档/README.md",
+      "sha256": "0e2ed4306baec8de9d3977dced842a44807d26a91b5c14a095777edfc7133eee"
+    },
+    {
+      "original": "VALIDATION.md",
+      "stored": "项目文档/VALIDATION.md",
+      "sha256": "dc38a9a85f48202284039c5e9f1614d9e0d9d87622a9a29bf9467ace43e10e17"
+    }
+  ],
+  "platform_entries": []
+}
